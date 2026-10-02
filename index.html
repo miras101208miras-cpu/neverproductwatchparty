@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WatchParty — Совместный просмотр видео</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Экран входа в комнату -->
+<div id="joinModal" class="modal-overlay">
+  <div class="join-card">
+    <div class="join-header">
+      <div class="cinema-icon">🍿</div>
+      <h1>WatchParty</h1>
+      <p class="subtitle">Смотрите YouTube синхронно с друзьями</p>
+    </div>
+
+    <div class="join-form">
+      <div class="form-group">
+        <label for="usernameInput">Ваше имя (ник):</label>
+        <input type="text" id="usernameInput" placeholder="Например: Алекс" maxlength="20">
+      </div>
+
+      <div class="form-group">
+        <label for="roomIdInput">Код комнаты:</label>
+        <input type="text" id="roomIdInput" placeholder="например: cinema-room">
+      </div>
+
+      <div class="join-buttons">
+        <button id="createRoomBtn" class="primary-btn">➕ Создать комнату</button>
+        <button id="joinRoomBtn" class="secondary-btn">Войти в комнату</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Основной экран кинотеатра -->
+<div id="cinemaApp" style="display: none;">
+  <!-- Шапка -->
+  <header class="cinema-header">
+    <div class="header-left">
+      <span class="logo-emoji">🍿</span>
+      <span class="logo-name">WatchParty</span>
+      <div class="room-badge">
+        <span>Комната: <b id="currentRoomText">...</b></span>
+        <button id="copyInviteBtn" class="copy-btn" title="Копировать ссылку для друзей">
+          🔗 Пригласить друзей
+        </button>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="url-input-box">
+        <input type="text" id="videoUrlInput" placeholder="Вставьте ссылку на YouTube (https://youtu.be/...)">
+        <button id="loadVideoBtn" class="load-btn">Загрузить</button>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="viewers-count">
+        <span>👥</span>
+        <span id="viewersCount">1</span>
+      </div>
+      <div id="viewersList" class="viewers-avatars">
+        <!-- Аватарки зрителей -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Тело кинотеатра -->
+  <main class="cinema-body">
+    <!-- Зона видеоплеера -->
+    <div class="player-wrapper">
+      <div id="playerContainer" class="video-responsive">
+        <div id="player"></div>
+        <!-- Слой для летящих реакций -->
+        <div id="reactionOverlay" class="reaction-overlay"></div>
+      </div>
+
+      <!-- Быстрые реакции эмодзи -->
+      <div class="reactions-bar">
+        <span class="reaction-label">Быстрые реакции:</span>
+        <button class="reaction-btn" data-emoji="🍿">🍿</button>
+        <button class="reaction-btn" data-emoji="🔥">🔥</button>
+        <button class="reaction-btn" data-emoji="😂">😂</button>
+        <button class="reaction-btn" data-emoji="❤️">❤️</button>
+        <button class="reaction-btn" data-emoji="😱">😱</button>
+        <button class="reaction-btn" data-emoji="👏">👏</button>
+        <button class="reaction-btn" data-emoji="💀">💀</button>
+      </div>
+    </div>
+
+    <!-- Боковой чат -->
+    <aside class="chat-sidebar">
+      <div class="chat-header">
+        <h3>Чат комнаты</h3>
+        <span class="sync-indicator">🟢 Синхронизировано</span>
+      </div>
+
+      <div id="chatMessages" class="chat-messages">
+        <!-- Сообщения -->
+      </div>
+
+      <form id="chatForm" class="chat-composer" onsubmit="return false;">
+        <input type="text" id="chatInput" placeholder="Написать в чат..." autocomplete="off">
+        <button type="submit" id="chatSendBtn" class="chat-send-btn">➤</button>
+      </form>
+    </aside>
+  </main>
+</div>
+
+<!-- Всплывающие уведомления -->
+<div id="toastContainer" class="toast-container"></div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
